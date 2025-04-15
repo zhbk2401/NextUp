@@ -24,8 +24,3 @@ Whether you’re late to class or wondering if you’re free — Nextup gives yo
 - 🇺🇦 Built for Lviv Polytechnic groups (e.g. ПЗ-17)
 
 ---
-
-## 🧠 How It Works
-
-Nextup pulls your schedule from this endpoint:
-
