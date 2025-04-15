@@ -1,15 +1,15 @@
-# 📱 Nextup
+# 📱 Next Up?
 
 **Nextup** is a minimal, smart schedule viewer for university students. It helps you instantly know what’s next on your timetable — no more checking PDFs or messy sites.
 
 ---
 
-## ❓ What is Nextup?
+## ❓ What is Next Up?
 
 **"What’s next?"**  
 That’s the only question this app answers.  
 
-Whether you’re late to class or wondering if you’re free — Nextup gives you a clean, instant answer. Built with **SwiftUI**, powered by **live data from LPNU**, and designed for maximum clarity.
+Whether you’re late to class or wondering if you’re free — Next Up gives you a clean, instant answer. Built with **SwiftUI**, powered by **live data from LPNU**, and designed for maximum clarity.
 
 ---
 
