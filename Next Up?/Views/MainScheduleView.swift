@@ -71,13 +71,66 @@ struct MainScheduleView: View {
                     .fill(.secondary.opacity(0.3))
                     .frame(maxWidth: .infinity, maxHeight: 1)
                     .blur(radius: 5)
-                CarouselView(itemsCount: viewModel.days.count) { index in
-                    DayView(viewModel: viewModel.days[index])
-                }
-                .onAppear {
-                    viewModel.loadSchedule()
+                
+                if viewModel.isLoading {
+                    ProgressView("Завантаження...")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .font(.system(size: 15, weight: .regular))
+                        .foregroundColor(.secondary)
+                } else if let errorMessage = viewModel.errorMessage {
+                    VStack (spacing: 10) {
+                        Text("Помилка!")
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundColor(.orange)
+                        Text(errorMessage)
+                            .font(.system(size: 15, weight: .regular))
+                            .foregroundColor(.secondary)
+                        
+                        HStack {
+                            Button("Викор. останні дані") {
+
+                            }
+                            .font(.system(size: 15, weight: .bold))
+                            .foregroundColor(.secondary)
+                            .padding()
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(.secondary.opacity(0.7), lineWidth: 1)
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(.secondary.opacity(0.3), lineWidth: 1)
+                                    .blur(radius: 5)
+                            }
+                            .shadow(color: .black.opacity(0.05), radius: 10, x: 0, y: 3)
+                            
+                            Button("Спробувати знову") {
+                                viewModel.loadSchedule()
+                            }
+                            .font(.system(size: 15, weight: .bold))
+                            .foregroundColor(.primary)
+                            .padding()
+                            .background(.quaternary)
+                            .cornerRadius(20)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(.secondary.opacity(0.2), lineWidth: 1)
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(.secondary.opacity(0.3), lineWidth: 1)
+                                    .blur(radius: 5)
+                            }
+                            .shadow(color: .black.opacity(0.05), radius: 10, x: 0, y: 3)
+                        }
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    CarouselView(itemsCount: viewModel.days.count) { index in
+                        DayView(viewModel: viewModel.days[index])
+                    }
                 }
             }
+        }
+        .onAppear {
+            viewModel.loadSchedule()
         }
     }
 }
