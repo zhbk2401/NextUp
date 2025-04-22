@@ -1,8 +1,4 @@
-//
-//  ErrorModel.swift
-//  Next Up?
-//
-//  Created by ZHBK 01 on 17.04.2025.
-//
-
-import Foundation
+enum ErrorModel: Error {
+    case parsingError(String)
+    case networkError(String)
+}
