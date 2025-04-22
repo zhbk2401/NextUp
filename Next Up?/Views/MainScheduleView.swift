@@ -38,7 +38,7 @@ struct MainScheduleView: View {
                                 .frame(maxWidth: .infinity, alignment: .trailing)
                         }
                     }
-                    .frame(width: .infinity, height: 56)
+                    .frame(maxWidth: .infinity, maxHeight: 56)
                     HStack() {
                         Picker("Week", selection: $viewModel.selectedWeek) {
                             Text("Чис.").tag(WeekTypeModel.weekC)
@@ -66,10 +66,10 @@ struct MainScheduleView: View {
                 .background(.ultraThinMaterial)
                 Rectangle()
                     .fill(.secondary.opacity(0.1))
-                    .frame(width: .infinity, height: 1)
+                    .frame(maxWidth: .infinity, maxHeight: 1)
                 Rectangle()
                     .fill(.secondary.opacity(0.3))
-                    .frame(width: .infinity, height: 1)
+                    .frame(maxWidth: .infinity, maxHeight: 1)
                     .blur(radius: 5)
                 CarouselView(itemsCount: viewModel.days.count) { index in
                     DayView(viewModel: viewModel.days[index])
