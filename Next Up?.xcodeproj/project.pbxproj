@@ -6,14 +6,18 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		6F1009B02DAEB33E00F40463 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 6F1009AF2DAEB33E00F40463 /* SwiftSoup */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
-		6F1009792DAE39F300F40463 /* Nex Up?.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Nex Up?.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F1009792DAE39F300F40463 /* Next Up?.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Next Up?.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		6F10097B2DAE39F300F40463 /* Nex Up? */ = {
+		6F10097B2DAE39F300F40463 /* Next Up? */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "Nex Up?";
+			path = "Next Up?";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F1009B02DAEB33E00F40463 /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -32,7 +37,7 @@
 		6F1009702DAE39F300F40463 = {
 			isa = PBXGroup;
 			children = (
-				6F10097B2DAE39F300F40463 /* Nex Up? */,
+				6F10097B2DAE39F300F40463 /* Next Up? */,
 				6F10097A2DAE39F300F40463 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -40,7 +45,7 @@
 		6F10097A2DAE39F300F40463 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6F1009792DAE39F300F40463 /* Nex Up?.app */,
+				6F1009792DAE39F300F40463 /* Next Up?.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,9 +53,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6F1009782DAE39F300F40463 /* Nex Up? */ = {
+		6F1009782DAE39F300F40463 /* Next Up? */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6F1009872DAE39F500F40463 /* Build configuration list for PBXNativeTarget "Nex Up?" */;
+			buildConfigurationList = 6F1009872DAE39F500F40463 /* Build configuration list for PBXNativeTarget "Next Up?" */;
 			buildPhases = (
 				6F1009752DAE39F300F40463 /* Sources */,
 				6F1009762DAE39F300F40463 /* Frameworks */,
@@ -61,13 +66,14 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				6F10097B2DAE39F300F40463 /* Nex Up? */,
+				6F10097B2DAE39F300F40463 /* Next Up? */,
 			);
-			name = "Nex Up?";
+			name = "Next Up?";
 			packageProductDependencies = (
+				6F1009AF2DAEB33E00F40463 /* SwiftSoup */,
 			);
 			productName = "Nex Up?";
-			productReference = 6F1009792DAE39F300F40463 /* Nex Up?.app */;
+			productReference = 6F1009792DAE39F300F40463 /* Next Up?.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -85,7 +91,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6F1009742DAE39F300F40463 /* Build configuration list for PBXProject "Nex Up?" */;
+			buildConfigurationList = 6F1009742DAE39F300F40463 /* Build configuration list for PBXProject "Next Up?" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -94,12 +100,15 @@
 			);
 			mainGroup = 6F1009702DAE39F300F40463;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				6F1009AE2DAEB33E00F40463 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6F10097A2DAE39F300F40463 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6F1009782DAE39F300F40463 /* Nex Up? */,
+				6F1009782DAE39F300F40463 /* Next Up? */,
 			);
 		};
 /* End PBXProject section */
@@ -251,7 +260,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Nex Up?/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Next Up?/_Preview Content\"";
 				DEVELOPMENT_TEAM = D75GAGF992;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -280,7 +289,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Nex Up?/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Next Up?/_Preview Content\"";
 				DEVELOPMENT_TEAM = D75GAGF992;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -305,7 +314,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6F1009742DAE39F300F40463 /* Build configuration list for PBXProject "Nex Up?" */ = {
+		6F1009742DAE39F300F40463 /* Build configuration list for PBXProject "Next Up?" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6F1009852DAE39F500F40463 /* Debug */,
@@ -314,7 +323,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6F1009872DAE39F500F40463 /* Build configuration list for PBXNativeTarget "Nex Up?" */ = {
+		6F1009872DAE39F500F40463 /* Build configuration list for PBXNativeTarget "Next Up?" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6F1009882DAE39F500F40463 /* Debug */,
@@ -324,6 +333,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6F1009AE2DAEB33E00F40463 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.7;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6F1009AF2DAEB33E00F40463 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6F1009AE2DAEB33E00F40463 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6F1009712DAE39F300F40463 /* Project object */;
 }

@@ -1,10 +1,10 @@
 import SwiftUI
 
 @main
-struct NexUpAppNexUpApp: App {
+struct NextUpApp: App {
     var body: some Scene {
         WindowGroup {
-            MainView()
+            MainScheduleView()
         }
     }
 }

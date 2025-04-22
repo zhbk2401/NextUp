@@ -1,30 +1,47 @@
 import SwiftUI
 
-struct CarouselView: View {
-    var days: [DayView]
-    let timer = Timer.publish(every: 3.0, on: .main, in: .common).autoconnect()
-    @State private var selectedImageIndex: Int = 0
+struct CarouselView<Content: View>: View {
+    @State private var selectedIndex = 0
+    let itemsCount: Int
+    @ViewBuilder let content: (Int) -> Content
 
     var body: some View {
         VStack {
-            TabView(selection: $selectedImageIndex) {
-                ForEach(0..<days.count, id: \.self) { index in
-                    days[index]
+            TabView(selection: $selectedIndex) {
+                ForEach(0..<itemsCount, id: \.self) { index in
+                    GeometryReader { geo in
+                        let screenWidth = UIScreen.main.bounds.width
+                        let distance = abs(geo.frame(in: .global).midX - screenWidth / 2)
+
+                        VStack {
+                            content(index)
+                                .blur(radius: min(distance / 50, 200))
+                                .opacity(1.0 - min(distance / screenWidth, 0.8))
+                                .brightness(min(distance / screenWidth / 10.0, 0.05))
+                                .scaleEffect(1.0 - min(distance / screenWidth * 0.05, 0.05))
+                            Spacer()
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                    }
                 }
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             .ignoresSafeArea()
 
-            HStack {
-                ForEach(0..<days.count, id: \.self) { index in
+            HStack(spacing: 5) {
+                ForEach(0..<itemsCount, id: \.self) { index in
+                    let myVal = abs(CGFloat(selectedIndex - index) / CGFloat(itemsCount))
                     Capsule()
-                        .fill(Color.secondary.opacity(selectedImageIndex == index ? 1 : 0.33))
-                        .frame(width: 35, height: 6)
-                        .onTapGesture {
-                            selectedImageIndex = index
-                        }
+                        .fill(Color.primary.opacity(selectedIndex == index ? 1 : 0.4))
+                        .frame(width: 10 * (1 - myVal), height: 10 * (1 - myVal))
+                        .blur(radius: CGFloat(itemsCount) * myVal)
+                        .animation(.bouncy, value: selectedIndex)
                 }
             }
+            .padding()
+            .onChange(of: selectedIndex, {
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            })
         }
     }
 }
