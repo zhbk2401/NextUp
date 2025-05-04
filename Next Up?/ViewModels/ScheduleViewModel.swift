@@ -5,7 +5,10 @@ class ScheduleViewModel: ObservableObject {
     @Published var selectedWeek: WeekTypeModel = .weekC { didSet { updateFilters() } }
     @Published var selectedSubgroup: ClassSubgroupModel = .subgroupTwo { didSet { updateFilters() } }
     @Published var selectedGroup: String = "ПЗ-17" { didSet { loadSchedule() } }
-
+    
+    @Published var isLoading = false
+    @Published var errorMessage: String?
+    
     private func updateFilters() {
         for day in days {
             day.selectedWeek = selectedWeek
@@ -14,19 +17,35 @@ class ScheduleViewModel: ObservableObject {
     }
     
     public func loadSchedule() {
-        ScheduleService.fetchSchedule(group: selectedGroup, semester: 2) { result in
-            switch result {
-            case .success(let schedule):
-                print("✅ Loaded:", schedule.count, "items")
-                for day in schedule {
-                    self.days.append(DayViewModel(model: day, selectedWeek: self.selectedWeek, selectedSubgroup: self.selectedSubgroup))
+        Task {
+            isLoading = true
+            errorMessage = nil
+            do {
+                days = []
+                let schedule = try await ScheduleService.fetchSchedule(group: selectedGroup, semester: 2)
+                await MainActor.run {
+                    print("✅ Loaded:", schedule.count, "items")
+                    self.days = schedule.map { day in
+                        DayViewModel(model: day, selectedWeek: self.selectedWeek, selectedSubgroup: self.selectedSubgroup)
+                    }
+                    self.isLoading = false
                 }
-            case .failure(let error):
-                switch error {
-                case .networkError(let msg):
-                    print("🚫 Network error:", msg)
-                case .parsingError(let msg):
-                    print("🚫 Parsing error:", msg)
+            } catch let error as ErrorModel {
+                await MainActor.run {
+                    switch error {
+                    case .networkError(let msg):
+                        self.errorMessage = "Помилка мережі: \(msg)"
+                        print("🚫 Network error:", msg)
+                    case .parsingError(let msg):
+                        self.errorMessage = "Помилка обробки даних: \(msg)"
+                        print("🚫 Parsing error:", msg)
+                    }
+                    self.isLoading = false
+                }
+            } catch {
+                await MainActor.run {
+                    self.errorMessage = "Невідома помилка: \(error.localizedDescription)"
+                    self.isLoading = false
                 }
             }
         }

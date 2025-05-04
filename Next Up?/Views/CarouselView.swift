@@ -17,7 +17,7 @@ struct CarouselView<Content: View>: View {
                             content(index)
                                 .blur(radius: min(distance / 50, 200))
                                 .opacity(1.0 - min(distance / screenWidth, 0.8))
-                                .brightness(min(distance / screenWidth / 10.0, 0.05))
+                                .brightness(min(distance / screenWidth / 10.0, 0.1))
                                 .scaleEffect(1.0 - min(distance / screenWidth * 0.05, 0.05))
                             Spacer()
                         }
