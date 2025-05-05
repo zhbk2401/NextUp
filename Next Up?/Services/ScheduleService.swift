@@ -3,104 +3,53 @@ import SwiftSoup
 
 class ScheduleService {
     static func fetchSchedule(group: String, semester: Int) async throws -> [DayModel] {
+        let url = try generateURL(group: group, semester: semester)
+        let (data, _) = try await URLSession.shared.data(from: url)
+        return try parseData(data: data)
+    }
+    
+    private static func generateURL(group: String, semester: Int) throws -> URL {
         var components = URLComponents(string: "https://student.lpnu.ua/students_schedule")
         components?.queryItems = [
             URLQueryItem(name: "studygroup_abbrname", value: group),
             URLQueryItem(name: "semestr", value: "\(semester)")
         ]
         guard let url = components?.url else {
-            throw ErrorModel.networkError("Invalid URL")
+            throw ErrorModel.networkError("Invalid URL parameters")
         }
-        let (data, _) = try await URLSession.shared.data(from: url)
-        return try parseScheduleHTML(data: data)
+        return url
     }
     
-    private static func parseScheduleHTML(data: Data) throws -> [DayModel] {
+    private static func parseData(data: Data) throws -> [DayModel] {
         var schedule: [DayModel] = []
-        let html = String(data: data, encoding: .utf8) ?? ""
-        let doc = try SwiftSoup.parse(html)
         var currentDay = DayModel()
         var currentClassNumber = 0
-        
-        guard let content: Element = try doc.select("div.view-content").first() else {
-            throw ErrorModel.parsingError("'view-content' div not found")
-        }
+        var currentDayNumber = 0
+        let content = try getContentFromData(data: data)
         
         for element in content.children() {
             switch try element.className() {
-            case "view-grouping-header":
+            case "view-grouping-header": // DAY
                 guard let dayType = DayTypeModel(rawValue: try element.text()) else {
                     throw ErrorModel.parsingError("'DayTypeModel' parsing error")
                 }
-                if (!currentDay.classes.isEmpty) {
+                if (currentDayNumber > 0) {
                     schedule.append(currentDay)
                 }
+                currentDayNumber += 1
                 currentDay = DayModel(day: dayType, classes: [])
                 break
-            
-            case "stud_schedule":
+            case "stud_schedule": // CLASS
                 for row in try element.select("div.views-row") {
-                    for classItem in row.children() {
-                        let subgroupType : ClassSubgroupModel
-                        if classItem.id().contains("group") {
-                            subgroupType = .both
-                        } else if classItem.id().contains("sub_1") {
-                            subgroupType = .subgroupOne
-                        } else if classItem.id().contains("sub_2") {
-                            subgroupType = .subgroupTwo
-                        } else {
-                            throw ErrorModel.parsingError("Subgroup type parsing error")
-                        }
-                        
-                        let weekType : WeekTypeModel
-                        if classItem.id().contains("full") {
-                            weekType = .both
-                        } else if classItem.id().contains("chys") {
-                            weekType = .weekC
-                        } else if classItem.id().contains("znam") {
-                            weekType = .weekZ
-                        } else {
-                            throw ErrorModel.parsingError("Week type parsing error")
-                        }
-                        
-                        var locations : [String] = []
-                        var teachers : [String] = []
-                        var classType = ClassTypeModel.laboratory
-                        let name : String
-                        guard
-                            let classContent = try classItem.select("div.group_content").first(),
-                            classContent.textNodes().count >= 2
-                        else {
-                            throw ErrorModel.parsingError("'group_content' div not found")
-                        }
-                        name = classContent.textNodes()[0].text().trimmingCharacters(in: .whitespacesAndNewlines)
-                        
-                        let details = classContent.textNodes()[1].text().trimmingCharacters(in: .whitespacesAndNewlines).split(separator: ", ")
-                        for info in details {
-                            if details.last == info {
-                                guard let tryClassType = ClassTypeModel(rawValue: String(info)) else {
-                                    throw ErrorModel.parsingError("Class type parsing error")
-                                }
-                                classType = tryClassType
-                            } else if info.contains("н.к.") {
-                                locations.append(String(info))
-                            } else {
-                                teachers.append(String(info))
-                            }
-                        }
-                        currentDay.classes.append(ClassModel(
-                            name: name,
-                            number: currentClassNumber,
-                            locations: locations,
-                            teachers: teachers,
-                            classType: classType,
-                            subgroupType: subgroupType,
-                            weekType: weekType))
+                    for classData in row.children() {
+                        let newClass = try parseClassData(classData: classData, classNumber: currentClassNumber)
+                        currentDay.classes.append(newClass)
                     }
                 }
                 break
-            default:
-                guard let classNumberText = try? element.text(), let classNumber = Int(classNumberText) else {
+            default: // CLASS NUMBER
+                guard let classNumberText = try? element.text(),
+                    let classNumber = Int(classNumberText) else {
                     throw ErrorModel.parsingError("Class number parsing error")
                 }
                 currentClassNumber = classNumber
@@ -109,5 +58,72 @@ class ScheduleService {
         }
         schedule.append(currentDay)
         return schedule
+    }
+    
+    private static func getContentFromData(data: Data) throws -> Element {
+        let html = String(data: data, encoding: .utf8) ?? ""
+        let doc = try SwiftSoup.parse(html)
+        guard let content: Element = try doc.select("div.view-content").first() else {
+            throw ErrorModel.parsingError("'view-content' div not found")
+        }
+        return content
+    }
+    
+    private static func parseClassData(classData: Element, classNumber: Int) throws -> ClassModel {
+        guard let classContent = try classData.select("div.group_content").first(),
+            classContent.textNodes().count >= 2
+        else {
+            throw ErrorModel.parsingError("'group_content' div not found")
+        }
+        let name = classContent.textNodes()[0].text().trimmingCharacters(in: .whitespacesAndNewlines)
+        let details = try parseClassDetails(info: classContent.textNodes()[1].text())
+        let subgroupType = try parseClassSubgroupFromID(classId: classData.id())
+        let weekType = try parseWeekTypeFromID(classId: classData.id())
+        return ClassModel(
+            name: name,
+            number: classNumber,
+            locations: details.locations,
+            teachers: details.teachers,
+            classType: details.classType,
+            subgroupType: subgroupType,
+            weekType: weekType)
+    }
+    
+    private static func parseClassDetails(info: String) throws -> (classType: ClassTypeModel, locations: [String], teachers: [String]) {
+        var classType = ClassTypeModel()
+        var locations: [String] = []
+        var teachers: [String] = []
+        let details = info.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: ", ")
+        
+        for element in details {
+            if element == details.last {
+                guard let tryClassType = ClassTypeModel(rawValue: String(element)) else {
+                    throw ErrorModel.parsingError("Class type parsing error")
+                }
+                classType = tryClassType
+            } else if element.contains("н.к.") {
+                locations.append(String(element))
+            } else {
+                teachers.append(String(element))
+            }
+        }
+        
+        return (classType, locations, teachers)
+    }
+    
+    private static func parseClassSubgroupFromID(classId: String) throws -> SubgroupTypeModel {
+        let subgroupString = classId.split(separator: "_").dropLast().joined(separator: "_")
+        guard let subgroup = SubgroupTypeModel(rawValue: String(subgroupString)) else {
+            throw ErrorModel.parsingError("Week type parsing error")
+        }
+        return subgroup
+    }
+    
+    private static func parseWeekTypeFromID(classId: String) throws -> WeekTypeModel {
+        guard let weekTypeString = classId.split(separator: "_").last,
+            let weekType = WeekTypeModel(rawValue: String(weekTypeString)) else {
+            throw ErrorModel.parsingError("Week type parsing error")
+        }
+        return weekType
     }
 }

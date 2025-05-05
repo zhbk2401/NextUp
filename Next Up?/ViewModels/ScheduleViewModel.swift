@@ -3,7 +3,7 @@ import Foundation
 class ScheduleViewModel: ObservableObject {
     @Published var days: [DayViewModel] = []
     @Published var selectedWeek: WeekTypeModel = .weekC { didSet { updateFilters() } }
-    @Published var selectedSubgroup: ClassSubgroupModel = .subgroupTwo { didSet { updateFilters() } }
+    @Published var selectedSubgroup: SubgroupTypeModel = .subgroupTwo { didSet { updateFilters() } }
     @Published var selectedGroup: String = "ПЗ-17" { didSet { loadSchedule() } }
     
     @Published var isLoading = false

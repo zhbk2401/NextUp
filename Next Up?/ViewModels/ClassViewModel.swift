@@ -19,7 +19,7 @@ class ClassViewModel: ObservableObject, Identifiable {
         default: return""
         } }
     
-    var subgroupType: ClassSubgroupModel { model.subgroupType }
+    var subgroupType: SubgroupTypeModel { model.subgroupType }
     var weekType: WeekTypeModel { model.weekType }
     
     init(model: ClassModel) {

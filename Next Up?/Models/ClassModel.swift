@@ -7,6 +7,6 @@ struct ClassModel : Identifiable {
     let locations: [String]
     let teachers: [String]
     let classType: ClassTypeModel
-    let subgroupType: ClassSubgroupModel
+    let subgroupType: SubgroupTypeModel
     let weekType: WeekTypeModel
 }

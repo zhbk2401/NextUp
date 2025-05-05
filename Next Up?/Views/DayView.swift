@@ -7,7 +7,7 @@ struct DayView: View {
         VStack(alignment: .center) {
             Text(shortToLongDayName(viewModel.dayText))
                 .font(.system(size: 26, weight: .bold))
-                .opacity(0.4)
+                .opacity(0.7)
             VStack (spacing: 10) {
                 ForEach(viewModel.activeClasses) { classVM in
                     ClassCardView(viewModel: classVM)

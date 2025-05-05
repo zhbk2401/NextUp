@@ -7,7 +7,7 @@ struct MainScheduleView: View {
         ZStack {
             AnimatedGradientView(
                 count: 6,
-                blurRadius: 80,
+                blurRadius: 150,
                 size: 250...400,
                 speed: 1,
                 color: ColorRange(
@@ -15,7 +15,7 @@ struct MainScheduleView: View {
                     saturationRange: 0.2...0.5,
                     brightnessRange: 0.8...1))
                 .ignoresSafeArea()
-                .opacity(0.3)
+                .opacity(1)
             VStack (spacing: 0) {
                 VStack (spacing: 0) {
                     HStack(spacing: 0) {
@@ -51,8 +51,8 @@ struct MainScheduleView: View {
                         }
                         Spacer()
                         Picker("Subgroup", selection: $viewModel.selectedSubgroup) {
-                            Text("I Підг.").tag(ClassSubgroupModel.subgroupOne)
-                            Text("II Підг.").tag(ClassSubgroupModel.subgroupTwo)
+                            Text("I Підг.").tag(SubgroupTypeModel.subgroupOne)
+                            Text("II Підг.").tag(SubgroupTypeModel.subgroupTwo)
                         }
                         .pickerStyle(SegmentedPickerStyle())
                         .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 3)
@@ -63,7 +63,7 @@ struct MainScheduleView: View {
                     .padding([.horizontal, .bottom])
                 }
                 .padding(.top, -10)
-                .background(.ultraThinMaterial)
+                .background(.regularMaterial)
                 Rectangle()
                     .fill(.secondary.opacity(0.1))
                     .frame(maxWidth: .infinity, maxHeight: 1)

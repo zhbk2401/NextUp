@@ -2,7 +2,7 @@ import Foundation
 
 class DayViewModel: ObservableObject, Identifiable {
     @Published var selectedWeek: WeekTypeModel
-    @Published var selectedSubgroup: ClassSubgroupModel
+    @Published var selectedSubgroup: SubgroupTypeModel
     
     private let model: DayModel
 
@@ -16,7 +16,7 @@ class DayViewModel: ObservableObject, Identifiable {
         }
     }
     
-    init(model: DayModel, selectedWeek: WeekTypeModel, selectedSubgroup: ClassSubgroupModel) {
+    init(model: DayModel, selectedWeek: WeekTypeModel, selectedSubgroup: SubgroupTypeModel) {
         self.model = model
         self.selectedWeek = selectedWeek
         self.selectedSubgroup = selectedSubgroup

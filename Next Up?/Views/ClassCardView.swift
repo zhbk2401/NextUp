@@ -49,15 +49,15 @@ struct ClassCardView: View {
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.ultraThinMaterial)
+        .background(.regularMaterial)
         .cornerRadius(20)
         .overlay {
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(.secondary.opacity(0.2), lineWidth: 1)
+//            RoundedRectangle(cornerRadius: 20)
+//                .stroke(.secondary.opacity(0.2), lineWidth: 1)
             RoundedRectangle(cornerRadius: 20)
                 .stroke(.secondary.opacity(0.3), lineWidth: 1)
                 .blur(radius: 5)
         }
-        .shadow(color: .black.opacity(0.05), radius: 10, x: 0, y: 3)
+        .shadow(color: .black.opacity(0.2), radius: 15, x: 0, y: 5)
     }
 }
